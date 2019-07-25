@@ -1,0 +1,32 @@
+{
+  "name": "solid-live-server",
+  "version": "0.0.1",
+  "description": "solid live server using the pub sub protocol",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solidpayorg/solid-live-server.git"
+  },
+  "keywords": [
+    "solid"
+  ],
+  "author": "Melvin Carvalho <melvincarvalho@gmail.com> (https://melvincarvalho.com/#me)",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/solidpayorg/solid-live-server/issues"
+  },
+  "homepage": "https://github.com/solidpayorg/solid-live-server#readme",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "https": "^1.0.0",
+    "inotifywait": "^1.8.3",
+    "run-parallel": "^1.1.9",
+    "serve-handler": "^6.1.0",
+    "url": "^0.11.0",
+    "uuid": "^3.3.2",
+    "ws": "^7.1.1"
+  }
+}
