@@ -4,38 +4,34 @@ const WebSocket = require('ws')
 const WebSocketServer = require('ws').Server
 const fs = require('fs')
 const uuid = require('uuid')
-const handler = require('serve-handler');
-const https = require('https');
+const handler = require('serve-handler')
+const https = require('https')
 const INotifyWait = require('inotifywait')
 const parallel = require('run-parallel')
 const url = require('url')
-
 
 const port = 3001
 
 const server = https.createServer({
   cert: fs.readFileSync('./fullchain.pem'),
   key: fs.readFileSync('./privkey.pem')
-}, 
+},
 (request, response) => {
   // You pass two more arguments for config and middleware
   // More details here: https://github.com/zeit/serve-handler#options
   return handler(request, response, {
-    public : 'public',
-    "renderSingle": true    
+    public: 'public',
+    'renderSingle': true
   })
 })
 
 WsServer(server)
 
 server.listen(port, () => {
-  console.log('Running at https://localhost:' + port);
-});
+  console.log('Running at https://localhost:' + port)
+})
 
-
-
-
-function defaultToChannel(iri) {
+function defaultToChannel (iri) {
   return url.parse(iri).path
 }
 
@@ -47,21 +43,19 @@ function WsServer (server, opts) {
   this.store = opts.store || new InMemory(opts)
   var toChannel = opts.toChannel || defaultToChannel
 
-
   publish = function (iri, callback) {
     this.store.get(iri, function (err, subscribers) {
-      
       if (err) {
         if (callback) return callback(err)
         else return
       }
-  
+
       if (!subscribers) {
         subscribers = {}
       }
 
       console.log('publish', 'subscribers', subscribers, 'iri', iri)
-      
+
       var tasks = Object.keys(subscribers)
         .map(function (uuid) {
           return function (cb) {
@@ -71,7 +65,7 @@ function WsServer (server, opts) {
             client.send('pub ' + channel)
           }
         })
-  
+
       parallel(tasks, callback)
     })
   }
@@ -83,18 +77,17 @@ function WsServer (server, opts) {
     path: opts.path
   })
 
-  var watch1 = new INotifyWait('./public/', { recursive: false });
+  var watch1 = new INotifyWait('./public/', { recursive: false })
   watch1.on('ready', function (filename) {
-    console.log('watcher is watching');
-  });
+    console.log('watcher is watching')
+  })
   watch1.on('change', function (filename) {
-    console.log(filename + ' change');
+    console.log(filename + ' change')
     self.publish(filename)
-  });
+  })
   watch1.on('add', function (filename) {
-    console.log(filename + ' added');
-  });
-  
+    console.log(filename + ' added')
+  })
 
   // Handling a single connection
   wss.on('connection', function (client) {
@@ -136,7 +129,6 @@ function WsServer (server, opts) {
     })
   })
 }
-
 
 function InMemory (opts) {
   opts = opts || {}
