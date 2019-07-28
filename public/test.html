@@ -1,0 +1,27 @@
+,html>
+
+<head>
+
+</head>
+
+<body>
+  <SCRIPT>
+    function openAndSub(uri) {
+      let ws = new WebSocket(location.href.replace('http', 'ws'))
+      ws.onmessage = function (m) { 
+        if (m && m.data && m.data.match(/pub .*/)) {
+          location.reload() 
+        }
+      }
+      ws.onopen = () => { ws.send('sub ' + uri) }
+    }
+
+    openAndSub('./public/test.jpg')
+
+  </SCRIPT>
+
+  <img src="https://localhost:3001/test.jpg" alt="" />
+
+</body>
+
+</html>
